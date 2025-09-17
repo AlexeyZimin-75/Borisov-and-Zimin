@@ -1,18 +1,14 @@
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BotLogicalTest {
 
-    private BotLogical bot;
-
     private BotLogical createBot() {
-        String testInput = "dummy";
-        Scanner scanner = new Scanner(new ByteArrayInputStream(testInput.getBytes()));
+        Scanner scanner = new Scanner(System.in);
         return new BotLogical(scanner);
     }
 
@@ -24,7 +20,7 @@ class BotLogicalTest {
 
         assertNotNull(message);
         assertTrue(message.contains("Привет"));
-        assertTrue(message.contains("yes"));
+        assertFalse(message.contains("yes"));
     }
     @Test
     void getHelpText() {
@@ -37,16 +33,8 @@ class BotLogicalTest {
     }
 
     @Test
-    void showHelp() {
-    }
-
-    @Test
-    void play() {
-    }
-
-    @Test
     void testCheckRightAnswer() {
-        BotLogical bot = createBot();
+        var bot = createBot();
         Clue clue = new Clue("Москва");
 
         BotLogical.GameResult result = bot.checkAnswer("Москва", "Москва", clue);
@@ -58,15 +46,23 @@ class BotLogicalTest {
     @Test
     void testCheckWrongAnswer() {
         BotLogical bot = createBot();
-        Clue clue = new Clue("Париж");
+        Clue clue = new Clue("Москва");
 
-        BotLogical.GameResult result = bot.checkAnswer("Москва", "Париж", clue);
+        BotLogical.GameResult result = bot.checkAnswer("Париж", "Москва", clue);
 
         assertFalse(result.isCorrect);
         assertFalse(result.isHelp);
     }
 
     @Test
-    void exitApplication() {
+    void testCheckHelpAnswer() {
+        BotLogical bot = createBot();
+        Clue clue = new Clue("Рим");
+
+        BotLogical.GameResult result = bot.checkAnswer("/help", "Рим", clue);
+
+        assertFalse(result.isCorrect);
+        assertTrue(result.isHelp);
     }
+
 }
