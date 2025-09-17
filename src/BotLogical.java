@@ -2,20 +2,21 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BotLogical {
-    private Scanner scanner;
+    private final Scanner scanner;
     private boolean isRunning = true;
 
     public BotLogical(Scanner scanner) {
         this.scanner = scanner;
     }
 
-
     public String getWelcomeMessage() {
-        return "Привет, помогу тебе выучить столицы\n" +
-                "Напиши yes,если хочешь начать\n" +
-                "/help - если хочешь узнать больше информации\n" +
-                "/exit - если хочешь закончить работу";
+        return """
+                Привет, помогу тебе выучить столицы
+                Напиши /start,если хочешь начать
+                /help - если хочешь узнать больше информации
+                /exit - если хочешь закончить работу""";
     }
+
 
     public void start() {
         System.out.println(getWelcomeMessage());
@@ -23,55 +24,52 @@ public class BotLogical {
         while (isRunning) {
             String command = scanner.next();
             processCommand(command);
+            System.out.println("""
+                    Хотите начать новую игру? (/start - для продолжения, \
+                    /exit - для выхода""");
         }
     }
 
-    public boolean processCommand(String command) {
-        if(command.equals("yes")){
-            return play();
-        }
-        else if (command.equals("/help")) {
-            return showHelp();
-        }
-        else if (command.equals("/exit")) {
-            exitApplication();
-            return false;
-        }
-        else {
-            return true; // Продолжаем работу
+    public void processCommand(String command) {
+        switch (command) {
+            case "/start" -> play();
+            case "/help" -> showHelp();
+            case "/exit" -> exitApplication();
+            default -> {
+            }
         }
     }
 
     public String getHelpText() {
-        return "ИНСТРУКЦИЯ ДЛЯ ИГРЫ \n" +
-                "Цель: угадать загаданную столицу\n" +
-                "Команды:\n" +
-                "/start - начать игру\n" +
-                "/help - показать помощь\n" +
-                "/exit - выйти из игры\n" +
-                "/continue - продолжить играть";
+        return """
+                ИНСТРУКЦИЯ ДЛЯ ИГРЫ\s
+                Цель: угадать загаданную столицу
+                Команды:
+                /start - начать игру
+                /help - показать помощь
+                /exit - выйти из игры
+                /continue - продолжить играть""";
     }
 
     public boolean showHelp() {
         System.out.println(getHelpText());
 
         String command = scanner.next();
-        if(command.equals("/help")){
-            return showHelp();
-        }
-        else if(command.equals("/start")){
-            return play();
-        }
-        else if(command.equals("/exit")){
-            exitApplication();
-            return false;
-        }
-        else if(command.equals("/continue")){
-            return play();
-        }
-        else{
-            System.out.println("Такой команды нет!");
-            return showHelp();
+        switch (command) {
+            case "/help" -> {
+                return showHelp();
+            }
+            case "/start", "/continue" -> {
+                return play();
+            }
+            case "/exit" -> {
+                exitApplication();
+                return false;
+            }
+            default -> {
+                System.out.println("Такой команды нет!");
+                return showHelp();
+            }
         }
     }
 
@@ -96,12 +94,12 @@ public class BotLogical {
 
             if (result.isCorrect) {
                 System.out.println("Правильно");
-                return askToContinue();
+                return true;
             } else {
                 System.out.println(result.message);
             }
         }
-        return askToContinue();
+        return true;
     }
 
     public static class GameResult {
@@ -128,18 +126,10 @@ public class BotLogical {
         return new GameResult(false, false, clue.getclue());
     }
 
-    public boolean askToContinue() {
-        System.out.println("Хотите продолжить? (yes/no)");
-        String answer = scanner.next();
-        return answer.equals("yes");
-    }
 
     public void exitApplication() {
         isRunning = false;
         System.out.println("До свидания");
     }
 
-    public boolean isRunning() {
-        return isRunning;
-    }
 }
