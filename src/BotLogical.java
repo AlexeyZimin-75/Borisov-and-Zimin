@@ -1,6 +1,7 @@
 import java.util.Map;
 import java.util.Scanner;
 
+
 public class BotLogical {
     private final Scanner scanner;
     private boolean isRunning = true;
@@ -9,66 +10,43 @@ public class BotLogical {
         this.scanner = scanner;
     }
 
-    public String getWelcomeMessage() {
-        return """
-                Привет, помогу тебе выучить столицы
-                Напиши /start,если хочешь начать
-                /help - если хочешь узнать больше информации
-                /exit - если хочешь закончить работу""";
-    }
-
-
     public void start() {
-        System.out.println(getWelcomeMessage());
+        System.out.println(ConsoleUI.getWelcomeMessage());
 
         while (isRunning) {
             String command = scanner.next();
             processCommand(command);
-            System.out.println("""
-                    Хотите начать новую игру? (/start - для продолжения, \
-                    /exit - для выхода""");
         }
     }
 
     public void processCommand(String command) {
-        switch (command) {
-            case "/start" -> play();
-            case "/help" -> showHelp();
-            case "/exit" -> exitApplication();
-            default -> {
-            }
+        switch (ConsoleUI.Commands.fromString(command)) {
+            case ConsoleUI.Commands.START -> play();
+            case ConsoleUI.Commands.HELP -> showHelp();
+            case ConsoleUI.Commands.EXIT -> exitApplication();
+            case null, default -> System.out.println("Такой команды нет!");
         }
     }
 
-    public String getHelpText() {
-        return """
-                ИНСТРУКЦИЯ ДЛЯ ИГРЫ\s
-                Цель: угадать загаданную столицу
-                Команды:
-                /start - начать игру
-                /help - показать помощь
-                /exit - выйти из игры
-                /continue - продолжить играть""";
-    }
 
     public boolean showHelp() {
-        System.out.println(getHelpText());
+        System.out.println(ConsoleUI.getHelpText());
 
-        String command = scanner.next();
-        switch (command) {
-            case "/help" -> {
-                return showHelp();
-            }
-            case "/start", "/continue" -> {
-                return play();
-            }
-            case "/exit" -> {
-                exitApplication();
-                return false;
-            }
-            default -> {
-                System.out.println("Такой команды нет!");
-                return showHelp();
+        while (true) {
+            String cmd = scanner.next();
+            ConsoleUI.Commands command = ConsoleUI.Commands.fromString(cmd);
+
+            switch (command) {
+                case ConsoleUI.Commands.HELP -> System.out.println(ConsoleUI.getHelpText());
+                case ConsoleUI.Commands.START, ConsoleUI.Commands.CONTINUE -> {
+                    return true;
+                }
+                case ConsoleUI.Commands.EXIT -> {
+                    exitApplication();
+                    return false; // выйти из игры
+                }
+                case null -> System.out.println("Такой команды нет!");
+                default -> System.out.println("Такой команды нет!");
             }
         }
     }
@@ -86,44 +64,29 @@ public class BotLogical {
         for (var i = 0; i < 4; i++) {
             String userAnswer = scanner.next();
 
-            GameResult result = checkAnswer(userAnswer, capital, clue);
-
-            if (result.isHelp) {
-                return showHelp();
+            if (userAnswer.equals("/exit")) {
+                exitApplication();
+                return false;
             }
 
-            if (result.isCorrect) {
+            GameEngine.GameResult result = GameEngine.checkAnswer(userAnswer, capital, clue);
+
+            if (result.isHelp()) {
+                if (!showHelp()) {
+                    return false;
+                }
+            }
+
+            if (result.isCorrect()) {
                 System.out.println("Правильно");
-                return true;
-            } else {
-                System.out.println(result.message);
+                clue.resetGuess();
+                break;
             }
+            System.out.println(result.message());
         }
+        clue.resetGuess();
+        System.out.println(ConsoleUI.getContinueMessage());
         return true;
-    }
-
-    public static class GameResult {
-        public boolean isCorrect;
-        public boolean isHelp;
-        public String message;
-
-        public GameResult(boolean isCorrect, boolean isHelp, String message) {
-            this.isCorrect = isCorrect;
-            this.isHelp = isHelp;
-            this.message = message;
-        }
-    }
-
-    public GameResult checkAnswer(String userAnswer, String correctAnswer, Clue clue) {
-        if (userAnswer.equals("/help")) {
-            return new GameResult(false, true, "");
-        }
-
-        if (userAnswer.equals(correctAnswer)) {
-            return new GameResult(true, false, "");
-        }
-
-        return new GameResult(false, false, clue.getclue());
     }
 
 
@@ -131,5 +94,4 @@ public class BotLogical {
         isRunning = false;
         System.out.println("До свидания");
     }
-
 }

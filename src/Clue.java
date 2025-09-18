@@ -21,4 +21,7 @@ public class Clue {
         }
     }
 
+    public void resetGuess() {
+        guess = 0;
+    }
 }
