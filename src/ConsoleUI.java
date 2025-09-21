@@ -25,8 +25,7 @@ public class ConsoleUI {
     public enum Commands {
         HELP ("/help"),
         START ("/start"),
-        EXIT ("/exit"),
-        CONTINUE ("/continue");
+        EXIT ("/exit")
 
         private final String commandText;
 
