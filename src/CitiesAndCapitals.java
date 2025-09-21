@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CitiesAndCapitals {
-    private static final String filePath = "123.csv";
+    private static final String filePath = "CountryAndCapitals.csv";
     public static Map.Entry<String,String> getRandomPair(){
         Random random = new Random();
         List<Map.Entry<String, String>> entryList = new ArrayList<>(storage.entrySet());
