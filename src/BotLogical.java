@@ -2,6 +2,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 
+
 public class BotLogical {
     private final Scanner scanner;
     private boolean isRunning = true;
@@ -22,34 +23,12 @@ public class BotLogical {
     public void processCommand(String command) {
         switch (ConsoleUI.Commands.fromString(command)) {
             case ConsoleUI.Commands.START -> play();
-            case ConsoleUI.Commands.HELP -> showHelp();
+            case ConsoleUI.Commands.HELP -> ConsoleUI.showHelp();
             case ConsoleUI.Commands.EXIT -> exitApplication();
             case null, default -> System.out.println("Такой команды нет!");
         }
     }
 
-
-    public boolean showHelp() {
-        System.out.println(ConsoleUI.getHelpText());
-
-        while (true) {
-            String cmd = scanner.next();
-            ConsoleUI.Commands command = ConsoleUI.Commands.fromString(cmd);
-
-            switch (command) {
-                case ConsoleUI.Commands.HELP -> System.out.println(ConsoleUI.getHelpText());
-                case ConsoleUI.Commands.START-> {
-                    return true;
-                }
-                case ConsoleUI.Commands.EXIT -> {
-                    exitApplication();
-                    return false; // выйти из игры
-                }
-                case null -> System.out.println("Такой команды нет!");
-                default -> System.out.println("Такой команды нет!");
-            }
-        }
-    }
 
 
     public boolean play() {
@@ -60,7 +39,6 @@ public class BotLogical {
         System.out.println("Введи столицу страны " + country);
 
         Clue clue = new Clue(capital);
-        int incorrectAttempts = 0;
 
         while (Clue.getCountClue() < 4) {
             String userAnswer = scanner.next();
@@ -73,7 +51,7 @@ public class BotLogical {
             GameEngine.GameResult result = GameEngine.checkAnswer(userAnswer, capital, clue);
 
             if (result.isHelp()) {
-                if (!showHelp()) {
+                if (!ConsoleUI.showHelp()) {
                     return false;
                 }
                 continue;
@@ -85,7 +63,6 @@ public class BotLogical {
                 break;
             }
             System.out.println(result.message());
-            incorrectAttempts++;
         }
         clue.resetGuess();
         System.out.println(ConsoleUI.getContinueMessage());

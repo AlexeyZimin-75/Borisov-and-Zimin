@@ -41,6 +41,10 @@ public class ConsoleUI {
             }
             return null;
         }
+    }
 
+    public static boolean showHelp() {
+        System.out.println(ConsoleUI.getHelpText());
+        return true;
     }
 }
