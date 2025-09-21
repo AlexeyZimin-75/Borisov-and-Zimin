@@ -7,6 +7,11 @@ public class Clue {
         this.capital = capital;
     }
 
+    public static int getCountClue() {
+        return guess;
+    }
+
+
     public static String getclue() { // дать подсказку
         guess++;
 
@@ -20,6 +25,8 @@ public class Clue {
             return "Подсказки закончились! Столица: " + capital;
         }
     }
+
+
 
     public void resetGuess() {
         guess = 0;

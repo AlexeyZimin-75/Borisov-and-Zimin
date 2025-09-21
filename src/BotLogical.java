@@ -38,7 +38,7 @@ public class BotLogical {
 
             switch (command) {
                 case ConsoleUI.Commands.HELP -> System.out.println(ConsoleUI.getHelpText());
-                case ConsoleUI.Commands.START, ConsoleUI.Commands.CONTINUE -> {
+                case ConsoleUI.Commands.START-> {
                     return true;
                 }
                 case ConsoleUI.Commands.EXIT -> {
@@ -53,15 +53,16 @@ public class BotLogical {
 
 
     public boolean play() {
-        Map.Entry<String, String> cityAndCapital = CitiesAndCapitals.getRandomPair();
+        Map.Entry<String, String> cityAndCapital = CountriesAndCapitals.getRandomPair();
         String capital = cityAndCapital.getValue();
         String country = cityAndCapital.getKey();
 
         System.out.println("Введи столицу страны " + country);
 
         Clue clue = new Clue(capital);
+        int incorrectAttempts = 0;
 
-        for (var i = 0; i < 4; i++) {
+        while (Clue.getCountClue() < 4) {
             String userAnswer = scanner.next();
 
             if (userAnswer.equals("/exit")) {
@@ -75,6 +76,7 @@ public class BotLogical {
                 if (!showHelp()) {
                     return false;
                 }
+                continue;
             }
 
             if (result.isCorrect()) {
@@ -83,6 +85,7 @@ public class BotLogical {
                 break;
             }
             System.out.println(result.message());
+            incorrectAttempts++;
         }
         clue.resetGuess();
         System.out.println(ConsoleUI.getContinueMessage());

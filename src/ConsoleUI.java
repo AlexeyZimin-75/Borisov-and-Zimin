@@ -14,7 +14,7 @@ public class ConsoleUI {
                 Команды:
                 /start - начать игру
                 /help - показать помощь
-                /exit - выйти из игры;
+                /exit - выйти из игры""";
     }
 
     public static String getContinueMessage() {
@@ -25,8 +25,7 @@ public class ConsoleUI {
     public enum Commands {
         HELP ("/help"),
         START ("/start"),
-        EXIT ("/exit"),
-        CONTINUE ("/continue");
+        EXIT ("/exit");
 
         private final String commandText;
 

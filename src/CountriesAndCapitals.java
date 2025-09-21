@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CitiesAndCapitals {
-    private static final String filePath = "123.csv";
+public class CountriesAndCapitals {
+    private static final String filePath = "CountriesAndCapitals.csv";
     public static Map.Entry<String,String> getRandomPair(){
         Random random = new Random();
         List<Map.Entry<String, String>> entryList = new ArrayList<>(storage.entrySet());
