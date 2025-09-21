@@ -14,8 +14,7 @@ public class ConsoleUI {
                 Команды:
                 /start - начать игру
                 /help - показать помощь
-                /exit - выйти из игры
-                /continue - продолжить играть""";
+                /exit - выйти из игры;
     }
 
     public static String getContinueMessage() {
