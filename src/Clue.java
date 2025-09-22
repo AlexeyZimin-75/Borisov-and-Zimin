@@ -20,7 +20,7 @@ public class Clue {
             return "Подсказки закончились! Столица: " + capital;
         }
     }
-fdgdfbdfb
+
     public void reset() { // сброс
         guess = 0;
     }
