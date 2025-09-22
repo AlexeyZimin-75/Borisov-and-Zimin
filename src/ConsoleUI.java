@@ -1,53 +1,64 @@
-import java.util.Scanner;
-
 public class ConsoleUI {
-    private final Scanner scanner = new Scanner(System.in);
-
-    public String getPutUserInput(){
-        return scanner.next();
-    }
-
-    public void showMainMessage(){
-        System.out.println(
-                "Привет, помогу тебе выучить столицы\n" +
-                        "Напиши yes, если хочешь начать\n" +
-                        "/help - если хочешь узнать больше информации\n" +
-                        "/exit - если хочешь закончить работу");
-    };
-
-    public void showHelp(){
-        System.out.println("ИНСТРУКЦИЯ ДЛЯ ИГРЫ ");
-        System.out.println("Цель: угадать загаданную столицу");
-        System.out.println("Команды:");
-        System.out.println("/start - начать игру");
-        System.out.println("/help - показать помощь");
-        System.out.println("/exit - выйти из игры");
-        System.out.println("/continue - продолжить играть");
-    }
-
-    public void askForCapital(String country){
-        System.out.println("Введи столицу страны " + country);
-    }
-
-    public void showClue(String clue){
-        System.out.println(clue);
-    }
-
-    public void showCorrectAnswerMessage() {
-        System.out.println("Правильно");
-    }
-
-    public void showUnknownCommandMessage() {
-        System.out.println("Такой команды нет!");
-    }
-
-    public void exit() {
-        System.exit(0);
+    public static String getDataOfPlayer(){
+        return """
+                Введите свое имя: 
+                """;
     }
 
 
 
+    public static String getWelcomeMessage(String nameOfPlayer) {
+        String name;
+        if(nameOfPlayer != null){
+            name = nameOfPlayer;
+        }
+        else{name = "друг";};
+        return """
+                Привет, %s! Помогу тебе выучить столицы
+                Напиши /start,если хочешь начать
+                /help - если хочешь узнать больше информации
+                /exit - если хочешь закончить работу""".formatted(name);
+    }
 
+    public static String getHelpText() {
+        return """
+                ИНСТРУКЦИЯ ДЛЯ ИГРЫ\s
+                Цель: угадать загаданную столицу
+                Команды:
+                /start - начать игру
+                /help - показать помощь
+                /exit - выйти из игры""";
+    }
+
+    public static String getContinueMessage() {
+        return """
+                Продолжить? (введите /start для продолжения или /exit для выхода)""";
+    }
+
+    public enum Commands {
+        HELP ("/help"),
+        START ("/start"),
+        EXIT ("/exit"),
+        CHANGE ("/change");
+
+        private final String commandText;
+
+        Commands(String commandText) {
+            this.commandText = commandText;
+        }
+
+        public static Commands fromString(String text) {
+            for (Commands cmd : Commands.values()) {
+                if (cmd.commandText.equalsIgnoreCase(text)) {
+                    return cmd;
+                }
+            }
+            return null;
+        }
+    }
+
+    public static boolean showHelp() {
+        System.out.println(ConsoleUI.getHelpText());
+        return true;
+    }
 }
-
-
