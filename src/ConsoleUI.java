@@ -1,8 +1,7 @@
 public class ConsoleUI {
     public static String getDataOfPlayer(){
-        return """
-                Введите свое имя: 
-                """;
+        return """ 
+                Введите свое имя:""";
     }
 
 
@@ -27,12 +26,13 @@ public class ConsoleUI {
                 Команды:
                 /start - начать игру
                 /help - показать помощь
-                /exit - выйти из игры""";
+                /exit - выйти из игры
+                /change - сменить пользователя""";
     }
 
     public static String getContinueMessage() {
         return """
-                Продолжить? (введите /start для продолжения или /exit для выхода)""";
+                Продолжить? (введите /start для продолжения или /exit для выхода или /change для смены пользователя)""";
     }
 
     public enum Commands {

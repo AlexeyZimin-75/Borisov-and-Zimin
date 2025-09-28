@@ -7,7 +7,7 @@ public class BotLogical {
     private final Scanner scanner;
     private boolean isRunning = true;
     private PlayerData activePlayer;
-    Players players = new Players();
+    private Players players = new Players();
 
 
     public BotLogical(Scanner scanner) {
@@ -34,16 +34,14 @@ public class BotLogical {
             case ConsoleUI.Commands.START -> play();
             case ConsoleUI.Commands.HELP -> ConsoleUI.showHelp();
             case ConsoleUI.Commands.EXIT -> exitApplication();
-            case ConsoleUI.Commands.CHANGE -> {
-                System.out.println("Введите имя: ");
-                String name = scanner.next();
-                changeUser(name);
-            }
+            case ConsoleUI.Commands.CHANGE -> changeUser();
             case null, default -> System.out.println("Такой команды нет!");
         }
     }
 
-    private void changeUser(String name){
+    private void changeUser(){
+        System.out.println(ConsoleUI.getDataOfPlayer());
+        String name = scanner.next();
         PlayerData player = new PlayerData(name);
         for(PlayerData user : players.getPlayers()){
             if(user.getPlayerName().equals(name)){
@@ -73,6 +71,10 @@ public class BotLogical {
                 exitApplication();
                 return false;
             }
+            else if(userAnswer.equals("/change")){
+                clue.resetGuess();
+                processCommand("/change");
+            }
 
             GameEngine.GameResult result = GameEngine.checkAnswer(userAnswer, capital, clue);
 
@@ -100,7 +102,8 @@ public class BotLogical {
 
     public void exitApplication() {
         isRunning = false;
-        System.out.println(activePlayer.getPlayerScore());
+        System.out.println("Очки: " + activePlayer.getPlayerScore());
         System.out.println("До свидания");
+        System.exit(0);
     }
 }
