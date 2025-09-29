@@ -7,6 +7,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         BotLogical game = new BotLogical(scanner);
         game.start();
+        scanner.close();
     }
 }
 
